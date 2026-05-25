@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! ❤️</title>
+    <!-- Confetti Library Script Tag -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe6e6;
+            color: #4a4a4a;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .hidden { display: none !important; }
+        button {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: scale(1.05); }
+        .gallery img {
+            width: 80%;
+            border-radius: 15px;
+            margin: 10px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-group {
+            position: relative;
+            height: 80px;
+            margin-top: 20px;
+        }
+        #noBtn {
+            position: absolute;
+            background-color: #7b7b7b;
+            left: 55%;
+            transition: all 0.2s ease;
+        }
+        #yesBtn {
+            position: absolute;
+            left: 25%;
+        }
+        /* Cake Animation Styling */
+        .cake {
+            width: 120px;
+            height: 90px;
+            background: #f1c40f;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            margin: 50px auto 20px auto;
+            box-shadow: inset 0 -15px 0 #d4ac0d;
+        }
+        .candle {
+            width: 10px;
+            height: 45px;
+            background: #e74c3c;
+            position: absolute;
+            top: -45px;
+            left: 55px;
+            border-radius: 3px;
+        }
+        .flame {
+            width: 16px;
+            height: 25px;
+            background: #f39c12;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: absolute;
+            top: -25px;
+            left: -3px;
+            animation: flicker 0.5s infinite alternate;
+            cursor: pointer;
+        }
+        @keyframes flicker {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); opacity: 0.9; }
+        }
+        .note {
+            font-style: italic;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #d81b60;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: THE OPENING -->
+    <div id="screen1" class="container">
+        <h1>You have a secret message! 🤫</h1>
+        <button onclick="nextScreen(1, 2)">Open It</button>
+    </div>
+
+    <!-- SCREEN 2: THE BIRTHDAY SHOW & PICS -->
+    <div id="screen2" class="container hidden">
+        <h1>🎉 Happy Birthday! 🎉</h1>
+        <p>Here are some of my favorite moments with you:</p>
+        <div class="gallery">
+            <!-- Replace 'photo1.jpg' with your actual image file names or links -->
+            <img src="photo1.jpg" alt="Our Memory 1">
+            <img src="photo2.jpg" alt="Our Memory 2">
+        </div>
+        <button onclick="nextScreen(2, 3)">Continue Next ❤️</button>
+    </div>
+
+    <!-- SCREEN 3: THE LOVE QUESTION -->
+    <div id="screen3" class="container hidden">
+        <h2>I have a very important question...</h2>
+        <h1>Do you love me? 🥺</h1>
+        <div class="btn-group">
+            <button id="yesBtn" onclick="nextScreen(3, 4)">Yes!</button>
+            <button id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: THE FINALE -->
+    <div id="screen4" class="container hidden">
+        <h1>Yay! 🥰</h1>
+        <p>Make a wish and click the flame to blow out the candle!</p>
+        
+        <div class="cake">
+            <div class="candle">
+                <div id="candleFlame" class="flame" onclick="blowCandle()"></div>
+            </div>
+        </div>
+
+        <div id="secretNote" class="note hidden">
+            ✨ ❤️ ✨
+            "To the most wonderful person in the world,
+            Thank you for bringing so much joy into my life. 
+            May this year bring you endless happiness.
+            I love you to the moon and back! 🎂"
+        </div>
+    </div>
+
+    <script>
+        // Function to transition between screens
+        function nextScreen(current, next) {
+            document.getElementById('screen' + current).classList.add('hidden');
+            document.getElementById('screen' + next).classList.remove('hidden');
+            
+            // If they click 'Yes' and move to Screen 4, blast confetti!
+            if (next === 4) {
+                triggerConfettiParty();
+            }
+        }
+
+        // Logic to make the "No" button run away when hovered or clicked
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            const randomX = Math.floor(Math.random() * 160) - 80; 
+            const randomY = Math.floor(Math.random() * 120) - 60;
+            
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        // Logic to blow out the candle flame and show the letter
+        function blowCandle() {
+            document.getElementById('candleFlame').style.display = 'none';
+            document.getElementById('secretNote').classList.remove('hidden');
+            
+            // Second pop of confetti directly on the cake area
+            confetti({
+                particleCount: 60,
+                spread: 60,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Beautiful continuous corner streams of confetti for 3 seconds
+        function triggerConfettiParty() {
+            var duration = 3 * 1000; 
+            var end = Date.now() + duration;
+
+            (function frame() {
+                // Left side launch
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                // Right side launch
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
