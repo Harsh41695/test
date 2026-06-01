@@ -162,7 +162,11 @@
             document.getElementById('screen' + current).classList.add('hidden');
             document.getElementById('screen' + next).classList.remove('hidden');
             
+            
             // If they click 'Yes' and move to Screen 4, blast confetti!
+            if(next===2){
+                triggerConfettiParty();
+            }
             if (next === 4) {
                 triggerConfettiParty();
             }
@@ -179,12 +183,12 @@
 
 const birthdayMessage = `✨ ❤️ ✨
 
-To the most wonderful person in the world,
+oh! Darlaa.... ❤️ Happy Birthday,❤️
 
-Thank you for bringing so much joy into my life.
-May this year bring you endless happiness.
+I may not be perfect, and I know I've made many mistakes, but one thing I am sure of is my love for you. It is deep, honest, and stronger than words can express. No matter how many flaws I have, no one could ever love you the way I do—with all my heart, every single day. Thank you for being the most beautiful part of my life. I wish you endless happiness, laughter, and all the love you deserve.
 
-I love you to the moon and back! 🎂`;
+Happy Birthday to the one who means everything to me. 🎂✨
+🎂`;
 
 function typeWriter(text, elementId, speed = 50) {
     let i = 0;
@@ -248,7 +252,7 @@ function nextPhoto() {
     typeWriter(birthdayMessage, "typewriterText", 40);
 
     confetti({
-        particleCount: 60,
+        particleCount: 100,
         spread: 60,
         origin: { y: 0.6 }
     });
