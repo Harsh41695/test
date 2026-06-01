@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday! ❤️</title>
     <!-- Confetti Library Script Tag -->
-    <script src="https://jsdelivr.net"></script>
+   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -41,12 +41,17 @@
             transition: transform 0.2s;
         }
         button:hover { transform: scale(1.05); }
-        .gallery img {
-            width: 80%;
-            border-radius: 15px;
-            margin: 10px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+      .gallery {
+    margin: 20px 0;
+}
+
+.gallery img {
+    width: 80%;
+    border-radius: 15px;
+    margin: 10px 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transition: all 0.5s ease;
+}
         .btn-group {
             position: relative;
             height: 80px;
@@ -77,7 +82,7 @@
             height: 45px;
             background: #e74c3c;
             position: absolute;
-            top: -45px;
+            top: -25px;
             left: 55px;
             border-radius: 3px;
         }
@@ -87,7 +92,7 @@
             background: #f39c12;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: absolute;
-            top: -25px;
+            top: -10px;
             left: -3px;
             animation: flicker 0.5s infinite alternate;
             cursor: pointer;
@@ -117,12 +122,12 @@
     <div id="screen2" class="container hidden">
         <h1>🎉 Happy Birthday! 🎉</h1>
         <p>Here are some of my favorite moments with you:</p>
-        <div class="gallery">
-            <!-- Replace 'photo1.jpg' with your actual image file names or links -->
-            <img src="photo1.jpg" alt="Our Memory 1">
-            <img src="photo2.jpg" alt="Our Memory 2">
-        </div>
-        <button onclick="nextScreen(2, 3)">Continue Next ❤️</button>
+       <div class="gallery">
+    <img id="memoryPhoto" src="Images/1.jpg" alt="Memory">
+</div>
+
+<button onclick="nextPhoto()">Next Photo 📸</button>
+<button onclick="nextScreen(2, 3)">Continue Next ❤️</button>
     </div>
 
     <!-- SCREEN 3: THE LOVE QUESTION -->
@@ -146,13 +151,9 @@
             </div>
         </div>
 
-        <div id="secretNote" class="note hidden">
-            ✨ ❤️ ✨
-            "To the most wonderful person in the world,
-            Thank you for bringing so much joy into my life. 
-            May this year bring you endless happiness.
-            I love you to the moon and back! 🎂"
-        </div>
+       <div id="secretNote" class="note hidden">
+    <span id="typewriterText"></span>
+</div>
     </div>
 
     <script>
@@ -176,19 +177,82 @@
             noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
         }
 
+const birthdayMessage = `✨ ❤️ ✨
+
+To the most wonderful person in the world,
+
+Thank you for bringing so much joy into my life.
+May this year bring you endless happiness.
+
+I love you to the moon and back! 🎂`;
+
+function typeWriter(text, elementId, speed = 50) {
+    let i = 0;
+    const element = document.getElementById(elementId);
+    element.innerHTML = "";
+
+    function typing() {
+        if (i < text.length) {
+            if (text.charAt(i) === '\n') {
+                element.innerHTML += '<br>';
+            } else {
+                element.innerHTML += text.charAt(i);
+            }
+            i++;
+            setTimeout(typing, speed);
+        }
+    }
+
+    typing();
+}
+
+
+const photos = [
+    "Images/0.jpeg",
+    "Images/1.jpg",
+    "Images/2.jpg",
+    "Images/3.jpeg",
+    "Images/4.jpg"
+];
+
+let currentPhoto = 0;
+
+function nextPhoto() {
+    const img = document.getElementById("memoryPhoto");
+
+    // Move current photo upward and fade
+    img.style.transform = "translateY(-50px) rotate(-10deg)";
+    img.style.opacity = "0";
+
+    setTimeout(() => {
+        currentPhoto = (currentPhoto + 1) % photos.length;
+
+        img.src = photos[currentPhoto];
+
+        img.style.transform = "translateY(50px) rotate(10deg)";
+        
+        setTimeout(() => {
+            img.style.opacity = "1";
+            img.style.transform = "translateY(0) rotate(0deg)";
+        }, 50);
+
+    }, 300);
+}
         // Logic to blow out the candle flame and show the letter
         function blowCandle() {
-            document.getElementById('candleFlame').style.display = 'none';
-            document.getElementById('secretNote').classList.remove('hidden');
-            
-            // Second pop of confetti directly on the cake area
-            confetti({
-                particleCount: 60,
-                spread: 60,
-                origin: { y: 0.6 }
-            });
-        }
+    document.getElementById('candleFlame').style.display = 'none';
 
+    const note = document.getElementById('secretNote');
+    note.classList.remove('hidden');
+
+    typeWriter(birthdayMessage, "typewriterText", 40);
+
+    confetti({
+        particleCount: 60,
+        spread: 60,
+        origin: { y: 0.6 }
+    });
+}
         // Beautiful continuous corner streams of confetti for 3 seconds
         function triggerConfettiParty() {
             var duration = 3 * 1000; 
